@@ -25,7 +25,7 @@ toggle_devices() {
   local state=$1
   
   for DEVICE in "${DEVICES[@]}"; do
-    # echo "Toggling device: $DEVICE"
+    # Get the directory for the device
     local dev_path=$(get_device_path $DEVICE)
     
     # Check if directory exists and is valid
@@ -34,7 +34,7 @@ toggle_devices() {
       exit 1
     fi
   
-    # Check if the device needs to be enable or disabled
+    # Check if the device needs to be disabled or enabled
     if [ "$state" = "1" ]; then
       echo "Disabling $DEVICE"
       # DISABLE device by writing 1 to the inhibited file of the device
