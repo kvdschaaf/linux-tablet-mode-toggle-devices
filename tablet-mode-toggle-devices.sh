@@ -37,12 +37,12 @@ toggle_devices() {
     # Check if the device needs to be enable or disabled
     if [ "$state" = "1" ]; then
       echo "Disabling $DEVICE"
-      # Disable device by writing 1 to the inhibited file of the device
+      # DISABLE device by writing 1 to the inhibited file of the device
       echo "$state" | tee "$dev_path/inhibited" > /dev/null
       
    elif [ "$state" = "0" ]; then
       echo "Enabling $DEVICE"
-      # Disable device by writing 1 to the inhibited file of the device
+      # ENABLE device by writing 0 to the inhibited file of the device
       echo "$state" | tee "$dev_path/inhibited" > /dev/null
     fi
   
@@ -52,14 +52,14 @@ toggle_devices() {
 # Start with line buffering to check if Tablet mode is enabled or disabled
 # -oL ensures that the standard output will be flushed after each newline, instead of waiting for large bufferd chunks
 stdbuf -oL libinput debug-events | grep --line-buffered "SWITCH_TOGGLE" | while read -r line; do
-  # When Tablet Mode is 
+  # When Tablet Mode is activated, disable the devices
   if echo "$line" | grep -q "state 1"; then
     if [ "$last_state" != "enabled" ]; then
       echo "Tablet mode Enabled"
       toggle_devices 1 # Disable device by writing a 1 to the inhibited file for the device
       last_state="enabled"
       fi
-  
+  # Else, if Tablet Mode is deactivated, enable the devices
   elif echo "$line" | grep -q "state 0"; then
     if [ "$last_state" != "disabled" ]; then
       echo "Tablet mode Disabled"
