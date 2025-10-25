@@ -1,0 +1,12 @@
+[Unit]
+Description=Tablet Mode Device Toggle Script
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/sudo /PATH/TO/FILE/tablet-mode-toggle-devices.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
